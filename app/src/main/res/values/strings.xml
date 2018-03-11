@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MathTools</string>
+
+    <!--English-->
+    <string name="InputText">Input number to translate</string>
+    <string name="convert">Convert</string>
+    <string name="RB2">Chose from list</string>
+    <string name="RB1">Input manual</string>
+    <string name="NSText1">Input current number system</string>
+    <string name="NSText2">Input new number system</string>
+    <string name="inputWarning">Please, select the number system</string>
+    <string name="incorrectInputWarning">Incorrect input data! Please, input a correct one</string>
+    <string name="error">ERROR</string>
+
+    <string-array name="Digits">
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>10</item>
+        <item>16</item>
+    </string-array>
+</resources>

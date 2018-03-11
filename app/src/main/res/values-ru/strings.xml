@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="InputText">Введите число для перевода</string>
+    <string name="convert">Перевести</string>
+    <string name="RB2">Выбрать из списка</string>
+    <string name="RB1">Ввести вручную</string>
+    <string name="NSText1">Введите исходную систему счисления</string>
+    <string name="NSText2">Введите новую систему счисления</string>
+    <string name="inputWarning">Пожалуйста, выберите систему счисления</string>
+    <string name="incorrectInputWarning">Некорректные данные! Пожалуйста, введите число допустимого формата</string>
+    <string name="error">ОШИБКА</string>
+</resources>
