@@ -2,23 +2,27 @@ package ru.issergeev.mathtools;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    RelativeLayout parent;
     Spinner currentNS, newNS;
     RadioButton RBmanual, RBselect;
     RadioGroup inputSelector;
     EditText num, NSText1, NSText2;
     Button convertButton;
+    ListView results;
 
     String number = "";
     int CNS = 2;
@@ -31,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_adapter,
                 R.id.Text, getResources().getStringArray(R.array.Digits));
+        final ArrayAdapter<String> resultArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 
+        parent = (RelativeLayout) findViewById(R.id.ParentLayout);
         num = (EditText) findViewById(R.id.inputNumber);
         currentNS = (Spinner) findViewById(R.id.currentNS);
         newNS = (Spinner) findViewById(R.id.newNS);
@@ -41,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
         NSText2 = (EditText) findViewById(R.id.newNSText);
         inputSelector = (RadioGroup) findViewById(R.id.Selector);
         convertButton = (Button) findViewById(R.id.translateButton);
+        results = (ListView) findViewById(R.id.ResultsList);
         currentNS.setAdapter(arrayAdapter);
         newNS.setAdapter(arrayAdapter);
+        results.setAdapter(resultArrayAdapter);
 
         inputSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -106,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 number = num.getText().toString().trim().replaceAll(",", ".").toUpperCase();
-                Log.d("Result", String.valueOf(convert(number, CNS, NNS)));
+                resultArrayAdapter.add(convert(number, CNS, NNS).toString());
                 Toast.makeText(MainActivity.this, convert(number, CNS, NNS), Toast.LENGTH_LONG).show();
             }
         });
@@ -114,42 +122,69 @@ public class MainActivity extends AppCompatActivity {
 
     private StringBuffer convert(String number, int CNS, int NNS) {
         StringBuffer Answer = new StringBuffer("");
-        double Result = 0;
+        StringBuffer modernResult = new StringBuffer("");
+        String Result = number;
         int k = 0;
 
+        if (NNS == CNS)
+            return new StringBuffer(number);
+
         if (checkNumber(number)) {
-            number = new StringBuilder(number).reverse().toString();
-            int Ppos = finder(number);
-            k = - Ppos;
+            if (CNS != 10) {
+                number = new StringBuilder(number).reverse().toString();
+                int Ppos = finder(number);
+                Result = "";
+                k = -Ppos;
 
-            for (int c = 0; c < Ppos; c++){
-                if (Character.isDigit(number.charAt(c))) {
-                    Result += Integer.valueOf(String.valueOf(number.charAt(c))) * Math.pow(CNS, k);
-                } else
-                    Result += (number.charAt(c) - 55) * Math.pow(CNS, k);
-                k++;
+                for (int c = 0; c < Ppos; c++) {
+                    if (Character.isDigit(number.charAt(c))) {
+                        Result += Integer.valueOf(String.valueOf(number.charAt(c))) * Math.pow(CNS, k);
+                    } else
+                        Result += (number.charAt(c) - 55) * Math.pow(CNS, k);
+                    k++;
+                }
+
+                if (Ppos != 0) {
+                    Ppos++;
+                }
+
+                for (int i = Ppos; i < number.length(); i++) {
+                    if (Character.isDigit(number.charAt(i))) {
+                        Result += Integer.valueOf(String.valueOf(number.charAt(i))) * Math.pow(CNS, k);
+                    } else
+                        Result += (number.charAt(i) - 55) * Math.pow(CNS, k);
+                    k++;
+                }
             }
 
-            if (Ppos != 0) {
-                Ppos++;
-            }
-//            else
-//                k = 0;
-
-            for (int i = Ppos; i < number.length(); i++) {
-                if (Character.isDigit(number.charAt(i))) {
-                    Result += Integer.valueOf(String.valueOf(number.charAt(i))) * Math.pow(CNS, k);
-                } else
-                    Result += (number.charAt(i) - 55) * Math.pow(CNS, k);
-                k++;
-            }
-            Answer.append(Result);
+            return toNew(Double.valueOf(Result), NNS);
         } else {
             Toast.makeText(MainActivity.this, getResources().getString(R.string.incorrectInputWarning), Toast.LENGTH_SHORT).show();
-            Answer.append(getResources().getString(R.string.error));
+            //Answer.append(getResources().getString(R.string.error));
         }
 
-        return Answer;
+        return null;
+    }
+
+    private StringBuffer toNew(Double number, int NNS) {
+        StringBuffer Answer = new StringBuffer("");
+        ArrayList<Integer> complexNumber = new ArrayList<Integer>(10);
+        double num = number;
+        while (num >= NNS) {
+            complexNumber.add((int) (num % NNS));
+            num = (int) Math.floor(num / NNS);
+        }
+
+        complexNumber.add((int) num);
+
+        for (int i = 0; i < complexNumber.size(); i++) {
+            if (complexNumber.get(i) > 9) {
+                Answer.append(complexNumber.get(i) + 55);
+            } else
+                Answer.append(complexNumber.get(i));
+        }
+
+        return Answer.reverse();
     }
 
     private int finder(String number) {

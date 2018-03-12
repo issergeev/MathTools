@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="#edff9d">
 <RelativeLayout
+    android:id="@+id/ParentLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,6 +22,43 @@
        android:hint="@string/InputText"
        android:layout_alignParentTop="true"
        android:gravity="center"/>
+
+   <LinearLayout
+       android:id="@+id/InputTypes"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/inputNumber"
+       android:orientation="vertical">
+
+      <Spinner
+          android:id="@+id/currentNS"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/layout_dimen"
+          android:entries="@array/Digits">
+      </Spinner>
+      <Spinner
+          android:id="@+id/newNS"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:entries="@array/Digits">
+      </Spinner>
+      <EditText
+          android:id="@+id/currentNSText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/layout_dimen"
+          android:hint="@string/NSText1"
+          android:inputType="number"
+          android:visibility="gone"/>
+      <EditText
+          android:id="@+id/newNSText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/NSText2"
+          android:inputType="number"
+          android:visibility="gone"/>
+   </LinearLayout>
    <RadioGroup
        android:id="@+id/Selector"
        android:layout_width="match_parent"
@@ -42,38 +80,6 @@
           android:text="@string/RB2"
           android:checked="true"/>
    </RadioGroup>
-   <Spinner
-       android:id="@+id/currentNS"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginBottom="@dimen/layout_dimen"
-       android:entries="@array/Digits"
-       android:layout_below="@id/inputNumber">
-   </Spinner>
-   <Spinner
-       android:id="@+id/newNS"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:entries="@array/Digits"
-       android:layout_below="@id/currentNS">
-   </Spinner>
-   <EditText
-       android:id="@+id/currentNSText"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_marginBottom="@dimen/layout_dimen"
-       android:hint="@string/NSText1"
-       android:inputType="number"
-       android:layout_below="@id/inputNumber"
-       android:visibility="gone"/>
-   <EditText
-       android:id="@+id/newNSText"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:hint="@string/NSText2"
-       android:inputType="number"
-       android:layout_below="@id/currentNSText"
-       android:visibility="gone"/>
    <Button
        android:id="@+id/translateButton"
        android:layout_width="match_parent"
@@ -82,5 +88,11 @@
        android:layout_marginTop="5dp"
        android:text="@string/convert"
        android:background="@drawable/button_shape"/>
+   <ListView
+       android:id="@+id/ResultsList"
+       android:layout_above="@id/Selector"
+       android:layout_below="@id/InputTypes"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"></ListView>
 </RelativeLayout>
 </LinearLayout>
